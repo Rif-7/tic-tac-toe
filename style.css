@@ -32,6 +32,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 3px 5px black;
+    transition: 100ms;
+}
+
+.cell:hover, .restart-btn:hover {
+    box-shadow: 5px 5px black;
+    transform: translate(-1%, -1%);
 }
 
 .choice {
@@ -48,6 +55,7 @@ body {
     font-size: 24px;
     color: white;
     font-weight: 400;
+    box-shadow: 2px 4px black;
 }
 
 .player-info, .turn-info {
