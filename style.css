@@ -40,11 +40,13 @@ body {
 .cell:hover, .restart-btn:hover {
     box-shadow: 5px 5px black;
     transform: translate(-1%, -1%);
+    background-color: #282828;
 }
 
 .choice {
     font-size: 48px;
     color: white;
+    
 }
 
 .restart-btn {
