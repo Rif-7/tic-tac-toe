@@ -34,7 +34,7 @@
     font-family: monospace;
 }
 
-.start-btn {
+.restart-btn {
     background-color: #282828;
     border-radius: 15px;
     border: 0px;
@@ -43,4 +43,10 @@
     font-size: 24px;
     color: white;
     font-weight: 400;
+}
+
+.game-alert {
+    font-size: 32px;
+    font-family: monospace;
+    font-weight: 700;
 }

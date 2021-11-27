@@ -2,25 +2,40 @@ function player(name, choice) {
     return {name, choice};
 }
 
-let playerOne = player("Player 1", "X");
-let playerTwo = player("Player 2", "O");
-
-let gameFlow = (() => {
+const gameFlowMain = () => {
     let players = {player1: null, player2: null};
     let currentPlayer;
-    const board = [[null, null, null],
+    let board = [[null, null, null],
                    [null, null, null],
                    [null, null, null]];
 
     const getCurrentPlayer = () => currentPlayer;
 
+    function _checkDraw() {
+        for (let i = 0; i < 3; i++) {
+            if (board[i].includes(null)) return false;
+        }
+        return true;
+    }
+
+    function resetBoard() {
+        board = [[null, null, null],
+                [null, null, null],
+                [null, null, null]];
+        currentPlayer = players.player1;
+    }
 
     //updates the local user array with choices
     function updateBoard(rowNo, cellNo, player) {
         board[rowNo][cellNo] = player.choice;
-        if (checkWinner()) {
-            document.querySelector(".container").innerHTML = "SOMEONE WON";
+        if (_checkWinner()) {
+            document.querySelector(".game-alert").textContent = `${player.name} Won`;
+            return true;
+        } else if (_checkDraw()) {
+            document.querySelector(".game-alert").textContent = "Draw Game";
+            return true;
         }
+        return false;
     }
 
     function setPlayers(playerOne, playerTwo) {
@@ -38,15 +53,15 @@ let gameFlow = (() => {
         }
     };
 
-    function checkForThree(row) {
+    function _checkForThree(row) {
         if (row[0] != null && row[0] === row[1] && row[0] === row[2])  return true;
         return false;
     }
 
-    function checkWinner() {
+    function _checkWinner() {
         // checking for row winners
         for (let r = 0; r < 3; r++) {
-            if (checkForThree(board[r])) return true;
+            if (_checkForThree(board[r])) return true;
         }
 
         //checking for column winners
@@ -55,27 +70,32 @@ let gameFlow = (() => {
             for (let i = 0; i < 3; i++) {
                 column.push(board[i][c]);
             }
-            if (checkForThree(column)) return true;
+            if (_checkForThree(column)) return true;
         }
 
         //checking for diagonal winnners
         const diagonal1 = [board[0][0], board[1][1], board[2][2]];
         const diagonal2 = [board[0][2], board[1][1], board[2][0]];
-        if (checkForThree(diagonal1) || checkForThree(diagonal2)) return true;
+        if (_checkForThree(diagonal1) || _checkForThree(diagonal2)) return true;
 
         return false;
     }
 
 
-    return {switchPlayer, setPlayers, getCurrentPlayer, updateBoard};
-})();
+    return {switchPlayer, setPlayers, getCurrentPlayer, updateBoard, resetBoard};
+};
 
-gameFlow.setPlayers(playerOne, playerTwo);
+
+gameFlow = gameFlowMain();
+gameFlow.setPlayers(player("Player 1", "X"), player("Player 2", "O"));
 
 
 function gameBoard() {
-    (function () {
+
+    // adding the board to the HTML DOM
+    function makeBoard() {
         const displayBoard = document.querySelector(".board");
+        displayBoard.innerHTML = "";
     
         for (let i = 0; i < 3; i++) {
             const row = document.createElement("div");
@@ -89,9 +109,13 @@ function gameBoard() {
             }
             displayBoard.appendChild(row);
         }
-    })();
 
-    const updateBoard = (rowNo, cellNo, player) => {
+        _addEvent();
+    };
+
+    makeBoard();
+
+    function _updateBoard(rowNo, cellNo, player) {
         const row = document.querySelector(`.rowNo-${rowNo}`);
         const cell = row.querySelector(`.cellNo-${cellNo}`);
         const choice = document.createElement("div");
@@ -102,19 +126,31 @@ function gameBoard() {
         gameFlow.updateBoard(rowNo, cellNo, player);
     }
 
-    const rows = document.querySelectorAll(".row");
-    rows.forEach((row) => {
-        const cells = row.querySelectorAll(".cell");
-        cells.forEach((cell) => {
-            cell.addEventListener("click", function () {
-                let rowNo = row.getAttribute("data-rowNo");
-                let cellNo = cell.getAttribute("data-cellNo");
-                updateBoard(rowNo, cellNo, gameFlow.getCurrentPlayer());
-                }, {once: true});
+    // Adding onclick event to all the cells
+    function _addEvent() {
+        const rows = document.querySelectorAll(".row");
+        rows.forEach((row) => {
+            const cells = row.querySelectorAll(".cell");
+            cells.forEach((cell) => {
+                cell.addEventListener("click", function () {
+                    let rowNo = row.getAttribute("data-rowNo");
+                    let cellNo = cell.getAttribute("data-cellNo");
+                    _updateBoard(rowNo, cellNo, gameFlow.getCurrentPlayer());
+                    }, {once: true});
+                })
             })
-        })
-
-    return;
+        }
+    
+    return { makeBoard };
 }
 
-gameBoard();
+const gameBoardVar = gameBoard()
+
+function resetGame() {
+    gameBoardVar.makeBoard();
+    gameFlow.resetBoard();
+    document.querySelector(".game-alert").textContent = "";
+}
+
+
+document.querySelector(".restart-btn").addEventListener("click", resetGame);
