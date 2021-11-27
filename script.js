@@ -2,21 +2,14 @@ function player(name, choice) {
     return {name, choice};
 }
 
-const gameFlowMain = () => {
-    let players = {player1: null, player2: null};
+const gameFlow = (() => {
+    const players = {player1: null, player2: null};
     let currentPlayer;
     let board = [[null, null, null],
                    [null, null, null],
                    [null, null, null]];
 
     const getCurrentPlayer = () => currentPlayer;
-
-    function _checkDraw() {
-        for (let i = 0; i < 3; i++) {
-            if (board[i].includes(null)) return false;
-        }
-        return true;
-    }
 
     function resetBoard() {
         board = [[null, null, null],
@@ -31,7 +24,8 @@ const gameFlowMain = () => {
         if (_checkWinner()) {
             document.querySelector(".game-alert").textContent = `${player.name} Won`;
             return true;
-        } else if (_checkDraw()) {
+        } 
+        else if (_checkDraw()) {
             document.querySelector(".game-alert").textContent = "Draw Game";
         }
         return false;
@@ -80,17 +74,21 @@ const gameFlowMain = () => {
         return false;
     }
 
+    function _checkDraw() {
+        for (let i = 0; i < 3; i++) {
+            if (board[i].includes(null)) return false;
+        }
+        return true;
+    }
+
 
     return {switchPlayer, setPlayers, getCurrentPlayer, updateBoard, resetBoard};
-};
+})();
 
-
-gameFlow = gameFlowMain();
 gameFlow.setPlayers(player("Player 1", "X"), player("Player 2", "O"));
 
 
-function gameBoard() {
-
+const gameBoard = (() => {
     // adding the board to the HTML DOM
     function makeBoard() {
         const displayBoard = document.querySelector(".board");
@@ -124,7 +122,9 @@ function gameBoard() {
         gameFlow.switchPlayer();
         if (gameFlow.updateBoard(rowNo, cellNo, player)) {
             document.querySelector(".board").innerHTML = document.querySelector(".board").innerHTML;
-        }
+        } 
+        document.querySelector(".turn-info").textContent = `${gameFlow.getCurrentPlayer().name}'s Turn`;
+        
     }
 
     // Adding onclick event to all the cells
@@ -144,14 +144,14 @@ function gameBoard() {
     
     
     return { makeBoard };
-}
+})();
 
-const gameBoardVar = gameBoard()
 
 function resetGame() {
-    gameBoardVar.makeBoard();
     gameFlow.resetBoard();
+    gameBoard.makeBoard();
     document.querySelector(".game-alert").textContent = "";
+    document.querySelector(".turn-info").textContent = `${gameFlow.getCurrentPlayer().name}'s turn`;
 }
 
 

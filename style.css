@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: 16px;
     align-items: center;
+    font-family: monospace;
 }
 
 .board {
@@ -31,7 +32,6 @@
 .choice {
     font-size: 24px;
     color: white;
-    font-family: monospace;
 }
 
 .restart-btn {
@@ -45,8 +45,11 @@
     font-weight: 400;
 }
 
+.player-info, .turn-info {
+    font-size: 16px;
+}
+
 .game-alert {
     font-size: 32px;
-    font-family: monospace;
     font-weight: 700;
 }
