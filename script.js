@@ -8,7 +8,20 @@ let playerTwo = player("Player 2", "O");
 let gameFlow = (() => {
     let players = {player1: null, player2: null};
     let currentPlayer;
+    const board = [[null, null, null],
+                   [null, null, null],
+                   [null, null, null]];
+
     const getCurrentPlayer = () => currentPlayer;
+
+
+    //updates the local user array with choices
+    function updateBoard(rowNo, cellNo, player) {
+        board[rowNo][cellNo] = player.choice;
+        if (checkWinner()) {
+            document.querySelector(".container").innerHTML = "SOMEONE WON";
+        }
+    }
 
     function setPlayers(playerOne, playerTwo) {
         players.player1 = playerOne;
@@ -16,7 +29,52 @@ let gameFlow = (() => {
         currentPlayer = players.player1;
     }
 
-    function makeBoard() {
+    function switchPlayer() {
+        if (currentPlayer.name === players.player1.name) {
+            currentPlayer = players.player2;
+        }
+        else {
+            currentPlayer = players.player1;
+        }
+    };
+
+    function checkForThree(row) {
+        if (row[0] != null && row[0] === row[1] && row[0] === row[2])  return true;
+        return false;
+    }
+
+    function checkWinner() {
+        // checking for row winners
+        for (let r = 0; r < 3; r++) {
+            if (checkForThree(board[r])) return true;
+        }
+
+        //checking for column winners
+        for (let c = 0; c < 3; c++) {
+            const column = [];
+            for (let i = 0; i < 3; i++) {
+                column.push(board[i][c]);
+            }
+            if (checkForThree(column)) return true;
+        }
+
+        //checking for diagonal winnners
+        const diagonal1 = [board[0][0], board[1][1], board[2][2]];
+        const diagonal2 = [board[0][2], board[1][1], board[2][0]];
+        if (checkForThree(diagonal1) || checkForThree(diagonal2)) return true;
+
+        return false;
+    }
+
+
+    return {switchPlayer, setPlayers, getCurrentPlayer, updateBoard};
+})();
+
+gameFlow.setPlayers(playerOne, playerTwo);
+
+
+function gameBoard() {
+    (function () {
         const displayBoard = document.querySelector(".board");
     
         for (let i = 0; i < 3; i++) {
@@ -31,30 +89,8 @@ let gameFlow = (() => {
             }
             displayBoard.appendChild(row);
         }
-    }
+    })();
 
-    function switchPlayer() {
-        if (currentPlayer.name === players.player1.name) {
-            currentPlayer = players.player2;
-        }
-        else {
-            currentPlayer = players.player1;
-        }
-    };
-
-    function checkWinner() {
-        return;
-    }
-
-
-    return {switchPlayer, setPlayers, checkWinner, makeBoard, getCurrentPlayer};
-})();
-
-gameFlow.makeBoard();
-gameFlow.setPlayers(playerOne, playerTwo);
-
-
-function gameBoard() {
     const updateBoard = (rowNo, cellNo, player) => {
         const row = document.querySelector(`.rowNo-${rowNo}`);
         const cell = row.querySelector(`.cellNo-${cellNo}`);
@@ -63,6 +99,7 @@ function gameBoard() {
         choice.textContent = player.choice;
         cell.append(choice);
         gameFlow.switchPlayer();
+        gameFlow.updateBoard(rowNo, cellNo, player);
     }
 
     const rows = document.querySelectorAll(".row");
@@ -81,12 +118,3 @@ function gameBoard() {
 }
 
 gameBoard();
-
-
-const foo = () => {
-    let bar = 0;
-    function changeBar() {
-        bar++;
-    }
-    return {changeBar, bar};
-}
