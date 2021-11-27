@@ -1,8 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
 .board {
     width: 250px;
     height: 250px;
     display: flex;
-    margin: auto;
 }
 
 .row {
@@ -16,4 +22,23 @@
     flex: 1 1 auto;
     margin: 3px;
     border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.choice {
+    font-size: 24px;
+    color: white;
+    font-family: monospace;
+}
+
+.start-btn {
+    background-color: #282828;
+    border-radius: 15px;
+    border: 0px;
+    padding: 8px 16px;
+    font-size: 24px;
+    color: white;
+    font-weight: 400;
 }
