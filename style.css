@@ -1,3 +1,8 @@
+body {
+    background-color: #1F2937;
+    color: white;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -20,7 +25,7 @@
 }
 
 .cell {
-    background-color: #282828;
+    background-color: #686868;
     flex: 1 0 0;
     margin: 3px;
     border-radius: 15px;
@@ -30,12 +35,12 @@
 }
 
 .choice {
-    font-size: 24px;
+    font-size: 48px;
     color: white;
 }
 
 .restart-btn {
-    background-color: #282828;
+    background-color: #686868;
     border-radius: 15px;
     border: 0px;
     padding: 8px 16px;
