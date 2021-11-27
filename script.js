@@ -33,7 +33,6 @@ const gameFlowMain = () => {
             return true;
         } else if (_checkDraw()) {
             document.querySelector(".game-alert").textContent = "Draw Game";
-            return true;
         }
         return false;
     }
@@ -123,7 +122,9 @@ function gameBoard() {
         choice.textContent = player.choice;
         cell.append(choice);
         gameFlow.switchPlayer();
-        gameFlow.updateBoard(rowNo, cellNo, player);
+        if (gameFlow.updateBoard(rowNo, cellNo, player)) {
+            document.querySelector(".board").innerHTML = document.querySelector(".board").innerHTML;
+        }
     }
 
     // Adding onclick event to all the cells
@@ -140,6 +141,7 @@ function gameBoard() {
                 })
             })
         }
+    
     
     return { makeBoard };
 }
