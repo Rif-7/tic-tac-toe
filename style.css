@@ -16,18 +16,19 @@ body {
     height: 250px;
     display: flex;
     flex-direction: column;
+    gap: 6px;
 }
 
 .row {
     display: flex;
     flex: 1 0 0;
     flex-direction: row;
+    gap: 6px;
 }
 
 .cell {
     background-color: #686868;
     flex: 1 0 0;
-    margin: 3px;
     border-radius: 15px;
     display: flex;
     justify-content: center;
