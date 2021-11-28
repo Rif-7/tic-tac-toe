@@ -21,6 +21,7 @@ const gameFlow = (() => {
     //updates the local user array with choices
     function updateBoard(rowNo, cellNo, player) {
         board[rowNo][cellNo] = player.choice;
+        _switchPlayer();
         if (_checkWinner()) {
             document.querySelector(".game-alert").textContent = `${player.name} Won`;
             return true;
@@ -37,7 +38,7 @@ const gameFlow = (() => {
         currentPlayer = players.player1;
     }
 
-    function switchPlayer() {
+    function _switchPlayer() {
         if (currentPlayer.name === players.player1.name) {
             currentPlayer = players.player2;
         }
@@ -82,7 +83,7 @@ const gameFlow = (() => {
     }
 
 
-    return {switchPlayer, setPlayers, getCurrentPlayer, updateBoard, resetBoard};
+    return {setPlayers, getCurrentPlayer, updateBoard, resetBoard};
 })();
 
 gameFlow.setPlayers(player("Player 1", "X"), player("Player 2", "O"));
@@ -119,7 +120,6 @@ const gameBoard = (() => {
         choice.classList.add("choice");
         choice.textContent = player.choice;
         cell.append(choice);
-        gameFlow.switchPlayer();
         if (gameFlow.updateBoard(rowNo, cellNo, player)) {
             document.querySelector(".board").innerHTML = document.querySelector(".board").innerHTML;
         } 
