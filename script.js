@@ -27,7 +27,7 @@ const gameFlow = (() => {
             return true;
         } 
         else if (_checkDraw()) {
-            document.querySelector(".game-alert").textContent = "Draw Game";
+            document.querySelector(".game-alert").textContent = "Tie Game";
         }
         return false;
     }
@@ -47,15 +47,15 @@ const gameFlow = (() => {
         }
     };
 
-    function _checkForThree(row) {
-        if (row[0] != null && row[0] === row[1] && row[0] === row[2])  return true;
+    function _checkForStreak(list) {
+        if (list[0] != null && list[0] === list[1] && list[0] === list[2])  return true;
         return false;
     }
 
     function _checkWinner() {
         // checking for row winners
         for (let r = 0; r < 3; r++) {
-            if (_checkForThree(board[r])) return true;
+            if (_checkForStreak(board[r])) return true;
         }
 
         //checking for column winners
@@ -64,13 +64,13 @@ const gameFlow = (() => {
             for (let i = 0; i < 3; i++) {
                 column.push(board[i][c]);
             }
-            if (_checkForThree(column)) return true;
+            if (_checkForStreak(column)) return true;
         }
 
         //checking for diagonal winnners
         const diagonal1 = [board[0][0], board[1][1], board[2][2]];
         const diagonal2 = [board[0][2], board[1][1], board[2][0]];
-        if (_checkForThree(diagonal1) || _checkForThree(diagonal2)) return true;
+        if (_checkForStreak(diagonal1) || _checkForStreak(diagonal2)) return true;
 
         return false;
     }
@@ -90,7 +90,7 @@ gameFlow.setPlayers(player("Player 1", "X"), player("Player 2", "O"));
 
 
 const gameBoard = (() => {
-    // adding the board to the HTML DOM
+    // adding the board to the display
     function makeBoard() {
         const displayBoard = document.querySelector(".board");
         displayBoard.innerHTML = "";
@@ -120,6 +120,8 @@ const gameBoard = (() => {
         choice.classList.add("choice");
         choice.textContent = player.choice;
         cell.append(choice);
+
+        //Updating the board array and checking if there's a winner
         if (gameFlow.updateBoard(rowNo, cellNo, player)) {
             document.querySelector(".board").innerHTML = document.querySelector(".board").innerHTML;
         } 
